@@ -491,7 +491,7 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
   };
 
   // Add nap lessons based on saved module lesson timings
-  if (localStorage.getItem("sleepHours") && localStorage.getItem("sleepTime")) { // saved sleephours and time
+  if (localStorage.getItem("sleepHours") !== undefined && localStorage.getItem("sleepTime") !== undefined) { // saved sleephours and time
     // Get occupied slots from timetableWithLessons
     let occupiedTimeslots = {
       Monday : [],
@@ -574,58 +574,6 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
 
     timetableWithLessons = {...timetableWithLessons, NAPPER};
   }
-
-  console.log("not a problem");
-// =======
-//   // Get occupied slots from timetableWithLessons
-//   let occupiedTimeslots = {
-//     Monday : [],
-//     Tuesday : [],
-//     Wednesday : [],
-//     Thursday : [],
-//     Friday : []
-//   };
-  
-//   for (const [key1, value1] of Object.entries(timetableWithLessons)) {
-//     if (key1 != "NAPPER" ) {
-//       for (const [key2, value2] of Object.entries(value1)) {
-//         for (const lesson of value2) {
-//           occupiedTimeslots[lesson.day].push(lesson.startTime.concat(lesson.endTime));
-//           occupiedTimeslots[lesson.day].sort();
-//         }
-//       }
-//     }
-//   }
-
-//   console.log(occupiedTimeslots);
-
-//   const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
-// >>>>>>> 7b64555d423d2dade457b253983caeeb9e77a3e4
-
-
-// <<<<<<< HEAD
-// =======
-//     NAPPER = {...NAPPER, ...newNapSlot};
-//     //console.log(NAPPER);
-// >>>>>>> 7b64555d423d2dade457b253983caeeb9e77a3e4
-//   }
-
-//   const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
-
-  // let NAPPER = { Tutorial1: nap("Monday", "1400", "1600"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
-  // let index = 1;
-  // for (const weekday of weekdays) {
-  //   let sTime = "0800";
-  //   let eTime = "0900";
-  //   let newNapSlot = { [index]: nap(weekday, sTime, eTime)};
-  //   index++;
-
-  //   NAPPER = {...NAPPER, ...newNapSlot};
-  //   console.log(NAPPER);
-  // }
-
-  // timetableWithLessons = {...timetableWithLessons, NAPPER};
-
 
   return {
     semester,

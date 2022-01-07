@@ -6,7 +6,6 @@ import { OnHoverCell, OnModifyCell } from 'types/views';
 import { convertTimeToIndex } from 'utils/timify';
 import styles from './TimetableRow.scss';
 import TimetableCell from './TimetableCell';
-import NapCell from './NapCell';
 
 type Props = {
   verticalMode: boolean;
@@ -34,23 +33,6 @@ const TimetableRow: React.FC<Props> = (props) => {
   const totalCols = endingIndex - startingIndex;
 
   let lastStartIndex = startingIndex;
-
-  const napLesson: ModifiableLesson = {
-    classNo: "", 
-    colorIndex: 0, 
-    //covidZone: "B", 
-    day: "Monday", 
-    endTime: "1800", 
-    isModifiable: false, 
-    lessonType: "Tutorial", 
-    moduleCode: "Nap", 
-    size: 16, 
-    startTime: "1700", 
-    title: "Nap", 
-    venue: "Pod", 
-    weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
-  }
-  
 
   return (
     <div className={styles.timetableRow}>
