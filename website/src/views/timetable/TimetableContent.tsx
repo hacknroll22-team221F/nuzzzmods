@@ -492,6 +492,8 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
 
   timetableWithLessons = {...timetableWithLessons, NAPPER};
 
+  console.log(timetableWithLessons);
+
   return {
     semester,
     timetable,
