@@ -364,7 +364,6 @@ class TimetableContent extends React.Component<Props, State> {
     const arrangedLessonsWithModifiableFlagWithNaps: TimetableArrangement = _.mapValues(
       arrangedLessonsWithModifiableFlag, 
       (dayRows) => {
-
         console.log(dayRows);
         let modifiedDayRows = [...dayRows, dummyNapModule];
         console.log(modifiedDayRows);
