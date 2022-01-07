@@ -26,6 +26,7 @@ type Props = {
 
   showExamCalendar: boolean;
   toggleExamCalendar: () => void;
+  toggleNaps: () => void;
 };
 
 const TimetableActions: React.FC<Props> = (props) => (
