@@ -488,6 +488,28 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
     }
   };
 
+  // Get occupied slots from timetableWithLessons
+  let occupiedTimeslots = {
+    Monday : [],
+    Tuesday : [],
+    Wednesday : [],
+    Thursday : [],
+    Friday : []
+  };
+  
+  for (const [key1, value1] of Object.entries(timetableWithLessons)) {
+    if (key1 != "NAPPER" ) {
+      for (const [key2, value2] of Object.entries(value1)) {
+        for (const lesson of value2) {
+          occupiedTimeslots[lesson.day].push(lesson.startTime.concat(lesson.endTime));
+          occupiedTimeslots[lesson.day].sort();
+        }
+      }
+    }
+  }
+
+  console.log(occupiedTimeslots);
+
   const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
 
   let NAPPER = { Tutorial1: nap("Monday", "1400", "1600"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
@@ -499,7 +521,7 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
     index++;
 
     NAPPER = {...NAPPER, ...newNapSlot};
-    console.log(NAPPER);
+    //console.log(NAPPER);
   }
 
   

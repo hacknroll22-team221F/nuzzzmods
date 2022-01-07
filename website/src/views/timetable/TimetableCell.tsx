@@ -88,7 +88,7 @@ function formatWeekRange(weekRange: WeekRange) {
 const TimetableCell: React.FC<Props> = (props) => {
   const { lesson, showTitle, onClick, onHover, hoverLesson, transparent } = props;
 
-  console.log(lesson);
+  //console.log(lesson);
 
   const moduleName = showTitle ? `${lesson.moduleCode} ${lesson.title}` : lesson.moduleCode;
   const Cell = props.onClick ? 'button' : 'div';
