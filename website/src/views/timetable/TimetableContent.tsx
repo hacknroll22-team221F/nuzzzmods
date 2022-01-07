@@ -488,9 +488,25 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
     }
   };
 
-  let NAPPER = { Tutorial1: nap("Monday", "0800", "0900"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
+  const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+
+  let NAPPER = { Tutorial1: nap("Monday", "1400", "1600"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
+  let index = 1;
+  for (const weekday of weekdays) {
+    let sTime = "0800";
+    let eTime = "0900";
+    let newNapSlot = { [index]: nap(weekday, sTime, eTime)};
+    index++;
+
+    NAPPER = {...NAPPER, ...newNapSlot};
+    console.log(NAPPER);
+  }
+
+  
 
   timetableWithLessons = {...timetableWithLessons, NAPPER};
+
+  console.log(timetableWithLessons);
 
   return {
     semester,
