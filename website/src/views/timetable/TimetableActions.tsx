@@ -12,6 +12,7 @@ import elements from 'views/elements';
 import config from 'config';
 import ShareTimetable from './ShareTimetable';
 import ExportMenu from './ExportMenu';
+import SleepTimePicker from './SleepTimePicker';
 
 import styles from './TimetableActions.scss';
 
@@ -120,6 +121,7 @@ const TimetableActions: React.FC<Props> = (props) => (
         style={{ marginLeft: 8 }}
       />
 
+      {/* 
       <TextField
           className={styles.textField}
           size="small"
@@ -130,15 +132,15 @@ const TimetableActions: React.FC<Props> = (props) => (
             native: true,
           }}
           style={{ marginLeft: 8 }}
-
-          //helperText="Please select your currency"
         >
           {sleepTimes.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
-        </TextField>
+        </TextField> */}
+
+      <SleepTimePicker/>
 
       <button
           type="button"
@@ -161,7 +163,7 @@ const TimetableActions: React.FC<Props> = (props) => (
   </div>
 );
 
-export default connect(null, {
+export default connect(null, {  
   toggleTimetableOrientation,
   toggleTitleDisplay,
 })(TimetableActions);
