@@ -201,7 +201,7 @@ class TimetableContent extends React.Component<Props, State> {
 
   resetTombstone = () => this.setState({ tombstone: null });
 
-  // Returns modules currently in the timetable
+  // Returns modules currently in the timetable  
   addedModules(): Module[] {
     const modules = getSemesterModules(this.props.timetableWithLessons, this.props.modules);
     return _.sortBy(modules, (module: Module) => getExamDate(module, this.props.semester));
@@ -286,9 +286,13 @@ class TimetableContent extends React.Component<Props, State> {
 
     const { showExamCalendar, hasNaps } = this.state;
 
-    let timetableLessons: Lesson[] = timetableLessonsArray(this.props.timetableWithLessons)
-      // Do not process hidden modules
-      .filter((lesson) => !this.isHiddenInTimetable(lesson.moduleCode));
+    let {NAPPER, ...timetableWithLessonsNoNap} = this.props.timetableWithLessons;
+
+    let timetableLessons: Lesson[] = hasNaps 
+      ? timetableLessonsArray(this.props.timetableWithLessons)
+          // Do not process hidden modules
+          .filter((lesson) => !this.isHiddenInTimetable(lesson.moduleCode))
+      : timetableLessonsArray(timetableWithLessonsNoNap).filter((lesson) => !this.isHiddenInTimetable(lesson.moduleCode));
 
     if (activeLesson) {
       const { moduleCode } = activeLesson;
@@ -315,9 +319,6 @@ class TimetableContent extends React.Component<Props, State> {
         timetableLessons.push(modifiableLesson);
       });
     }
-
-    // TODO: insert nap lessons into timetable lessons
-
 
     // Inject color into module
     const coloredTimetableLessons = timetableLessons.map(
@@ -393,7 +394,7 @@ class TimetableContent extends React.Component<Props, State> {
                 ref={this.timetableRef}
               >
                 <Timetable
-                  lessons={hasNaps ? arrangedLessonsWithModifiableFlagWithNaps :  arrangedLessonsWithModifiableFlag}
+                  lessons={arrangedLessonsWithModifiableFlag}
                   isVerticalOrientation={isVerticalOrientation}
                   isScrolledHorizontally={this.state.isScrolledHorizontally}
                   showTitle={isShowingTitle}
@@ -523,8 +524,6 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
     NAPPER = {...NAPPER, ...newNapSlot};
     //console.log(NAPPER);
   }
-
-  
 
   timetableWithLessons = {...timetableWithLessons, NAPPER};
 
