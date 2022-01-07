@@ -78,6 +78,24 @@ const TimetableActions: React.FC<Props> = (props) => (
           )}
         </button>
       )}
+
+      <input>
+
+      </input>
+
+      <select>
+      </select>
+
+      <button
+          type="button"
+          className={classnames(
+            styles.calendarBtn,
+            elements.examCalendarBtn,
+            'btn-outline-primary btn btn-svg',
+          )}
+      >
+        Zz Generate Naps
+        </button>
     </div>
 
     <div className={styles.buttonGroup} role="group" aria-label="Timetable exporting">
