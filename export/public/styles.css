@@ -26,6 +26,22 @@ h1 {
   border-radius: 0.25rem;
 }
 
+.textbox {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  border-color: #ff5138;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+}
+
 a.btn {
   text-decoration: none;
 }

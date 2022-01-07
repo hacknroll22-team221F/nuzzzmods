@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+import { TextField } from '@mui/material';
 
 import { toggleTimetableOrientation, toggleTitleDisplay } from 'actions/theme';
 import { Semester } from 'types/modules';
@@ -29,7 +30,27 @@ type Props = {
   toggleNaps: () => void;
 };
 
+const sleepTimes = [
+  {
+    value: '00:00',
+    label: '00:00',
+  },
+  {
+    value: '01:00',
+    label: '01:00',
+  },
+  {
+    value: '02:00',
+    label: '02:00',
+  },
+  {
+    value: 'JPY',
+    label: '03:00',
+  },
+];
+
 const TimetableActions: React.FC<Props> = (props) => (
+  
   <div
     className="btn-toolbar justify-content-between"
     role="toolbar"
@@ -79,13 +100,38 @@ const TimetableActions: React.FC<Props> = (props) => (
           )}
         </button>
       )}
+    </div>
 
-      <input>
+    <div className={styles.buttonGroup} role="group" aria-label="Nap generation">
+      
+      <TextField
+        className={styles.textField}
+        id="outlined-basic"
+        label="Daily hours of sleep"
+        variant="outlined"
+        size="small"
+        style={{ marginLeft: 8 }}
+      />
 
-      </input>
+      <TextField
+          className={styles.textField}
+          size="small"
+          id="outlined-select-sleeptime-native"
+          select
+          label="Daily sleep time"
+          SelectProps={{
+            native: true,
+          }}
+          style={{ marginLeft: 8 }}
 
-      <select>
-      </select>
+          //helperText="Please select your currency"
+        >
+          {sleepTimes.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </TextField>
 
       <button
           type="button"
@@ -95,8 +141,8 @@ const TimetableActions: React.FC<Props> = (props) => (
             'btn-outline-primary btn btn-svg',
           )}
       >
-        Zz Generate Naps
-        </button>
+      Zz Generate Naps
+      </button>
     </div>
 
     <div className={styles.buttonGroup} role="group" aria-label="Timetable exporting">

@@ -41,6 +41,21 @@ $btn-margin: 0.5rem;
   }
 }
 
+.textField {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: -$btn-margin; // Negate childrens' left margins
+  border-color: #ff5138;
+
+  @include media-breakpoint-up(md) {
+    :global(.textbox) {
+      padding: 0.25rem 0.25rem;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
 // Two layout forms:
 //
 // 1. Left and right on one row, with space between two groups
