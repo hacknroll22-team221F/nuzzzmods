@@ -26,11 +26,14 @@ type Props = {
 
   showExamCalendar: boolean;
   toggleExamCalendar: () => void;
+
+  hasNaps: boolean;
   toggleNaps: () => void;
 };
 
-function generateNaps() {
+function generateNaps(toggleNaps: () => void) {
   console.log("here");
+  toggleNaps();
 }
 
 const TimetableActions: React.FC<Props> = (props) => (
@@ -98,9 +101,9 @@ const TimetableActions: React.FC<Props> = (props) => (
             elements.examCalendarBtn,
             'btn-outline-primary btn btn-svg',
           )}
-          onClick={() => generateNaps()}
+          onClick={() => generateNaps(props.toggleNaps)}
       >
-        Zz Generate Naps
+        {props.hasNaps ? "Clear Naps" : "Zz Generate Naps"}
         </button>
     </div>
 

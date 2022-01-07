@@ -51,10 +51,6 @@ const TimetableRow: React.FC<Props> = (props) => {
     weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
   }
   
-  console.log(napLesson.colorIndex);
-
-  // TO-DO: the hasNap boolean should be updated once generateNaps has been clicked, so will require react state from 
-  const hasNap = false;
 
   return (
     <div className={styles.timetableRow}>
@@ -83,8 +79,7 @@ const TimetableRow: React.FC<Props> = (props) => {
               }
             : {};
 
-        return hasNap ? 
-        <NapCell/> : (
+        return (
           <TimetableCell
             key={lesson.startTime}
             style={style}
