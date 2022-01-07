@@ -344,17 +344,18 @@ class TimetableContent extends React.Component<Props, State> {
         ),
     );
 
+    //start and end time 
     const dummyNapModule: Lesson = [{
       classNo: "1",
       colorIndex: 1,
       covidZone: "Unknown",
       day: "Tuesday",
-      endTime: "1100",
+      endTime: "1000",
       isModifiable: false,
       lessonType: "Laboratory",
       moduleCode: "Nap",
       size: 16,
-      startTime: "1000",
+      startTime: "0900",
       title: "Nap",
       venue: "POD",
       weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -365,7 +366,30 @@ class TimetableContent extends React.Component<Props, State> {
       arrangedLessonsWithModifiableFlag, 
       (dayRows) => {
         console.log(dayRows);
-        let modifiedDayRows = [...dayRows, dummyNapModule];
+        let modifiedDayRows = [...dayRows];
+        let count = 800;
+        for (var i = 0; i < 2; i++) {
+          let end = count + 100;
+          let sTime = (count.toString() == "800" || count.toString() == "900") ? "0" + count.toString() : count.toString();
+          let eTime = (end.toString() == "900") ? "0900" : end.toString();
+          const dummyNapModule1: Lesson = [{
+            classNo: "2",
+            colorIndex: 5,
+            covidZone: "Unknown",
+            day: "Tuesday",
+            endTime: eTime,
+            isModifiable: false,
+            lessonType: "Laboratory",
+            moduleCode: "Nap",
+            size: 16,
+            startTime: sTime,
+            title: "Nap",
+            venue: "POD",
+            weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
+          }]
+          count+= 100
+          modifiedDayRows.push(dummyNapModule1);
+        }
         console.log(modifiedDayRows);
         return modifiedDayRows;
         // dayRows.map((row) => {
