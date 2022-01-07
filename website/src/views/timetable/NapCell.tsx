@@ -82,64 +82,20 @@ function formatWeekRange(weekRange: WeekRange) {
 
 /**
  * Smallest unit in timetable.
- * Representing a lesson in this case. In future we
- * might explore other representations e.g. grouped lessons
+ * Representing a Nap in this case.
+ * 
+ * TO-DO: Make more complicated once the generation is there. 
  */
-const TimetableCell: React.FC<Props> = (props) => {
-  const { lesson, showTitle, onClick, onHover, hoverLesson, transparent } = props;
+const NapCell = () => {
 
-  const moduleName = showTitle ? `${lesson.moduleCode} ${lesson.title}` : lesson.moduleCode;
-  const Cell = props.onClick ? 'button' : 'div';
-  const isHoveredOver = isEqual(getHoverLesson(lesson), hoverLesson);
-
-  const conditionalProps = onClick
-    ? {
-        onClick: (e: React.MouseEvent) => {
-          e.preventDefault();
-          onClick(e.currentTarget.getBoundingClientRect());
-        },
-      }
-    : {};
-
-  const weekText = consumeWeeks<React.ReactNode>(lesson.weeks, formatNumericWeeks, formatWeekRange);
-
-  const className = classnames(
-    styles.baseCell,
-    getLessonIdentifier(lesson),
-    elements.lessons,
-    transparent ? styles.transparentCell : [styles.coloredCell, `color-${lesson.colorIndex}`],
-    {
-      hoverable: !!onClick,
-      [styles.clickable]: !!onClick,
-      [styles.available]: lesson.isAvailable,
-      [styles.active]: lesson.isActive,
-      // Local hover style for the timetable planner timetable,
-      [styles.hover]: isHoveredOver,
-      // Global hover style for module page timetable
-      hover: isHoveredOver,
-    },
-  );
+  const moduleName = "Nap";
+  const Cell = 'div'; // props.onClick ? 'button' : 
 
   return (
     <Cell
-      className={className}
-      style={props.style}
-      onMouseEnter={() => onHover(getHoverLesson(lesson))}
-      onTouchStart={() => onHover(getHoverLesson(lesson))}
-      onMouseLeave={() => onHover(null)}
-      onTouchEnd={() => onHover(null)}
-      {...conditionalProps}
-    >
-      <div className={styles.cellContainer}>
-        <div className={styles.moduleName}>{moduleName}</div>
-        <div>
-          {LESSON_TYPE_ABBREV[lesson.lessonType]} [{lesson.classNo}]
-        </div>
-        <div>{lesson.venue.startsWith('E-Learn') ? 'E-Learning' : lesson.venue}</div>
-        {weekText && <div>{weekText}</div>}
-      </div>
+    >{moduleName}
     </Cell>
-  );
+    );
 };
 
-export default TimetableCell;
+export default NapCell;

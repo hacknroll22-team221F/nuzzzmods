@@ -264,6 +264,7 @@ class TimetableContent extends React.Component<Props, State> {
           </>
         )}
         {this.renderModuleTable(nonClashingMods, horizontalOrientation, tombstone)}
+        
       </>
     );
   }
@@ -319,6 +320,8 @@ class TimetableContent extends React.Component<Props, State> {
       }),
     );
 
+    
+
     const arrangedLessons = arrangeLessonsForWeek(coloredTimetableLessons);
     const arrangedLessonsWithModifiableFlag: TimetableArrangement = _.mapValues(
       arrangedLessons,
@@ -336,6 +339,11 @@ class TimetableContent extends React.Component<Props, State> {
           }),
         ),
     );
+
+    // TO-DO --> From arrangedLessons, have an algorithm that generates Naps here to give arrangedNaps
+    const arrangedNaps = [];
+
+
 
     const isVerticalOrientation = timetableOrientation !== HORIZONTAL;
     const isShowingTitle = !isVerticalOrientation && showTitle;
@@ -408,7 +416,6 @@ class TimetableContent extends React.Component<Props, State> {
                   toggleExamCalendar={() => this.setState({ showExamCalendar: !showExamCalendar })}
                 />
               </div>
-
               <div className={styles.modulesSelect}>
                 {!readOnly && (
                   <ModulesSelectContainer

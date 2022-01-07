@@ -29,6 +29,10 @@ type Props = {
   toggleNaps: () => void;
 };
 
+function generateNaps() {
+  console.log("here");
+}
+
 const TimetableActions: React.FC<Props> = (props) => (
   <div
     className="btn-toolbar justify-content-between"
@@ -94,6 +98,7 @@ const TimetableActions: React.FC<Props> = (props) => (
             elements.examCalendarBtn,
             'btn-outline-primary btn btn-svg',
           )}
+          onClick={() => generateNaps()}
       >
         Zz Generate Naps
         </button>

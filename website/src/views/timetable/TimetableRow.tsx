@@ -6,6 +6,7 @@ import { OnHoverCell, OnModifyCell } from 'types/views';
 import { convertTimeToIndex } from 'utils/timify';
 import styles from './TimetableRow.scss';
 import TimetableCell from './TimetableCell';
+import NapCell from './NapCell';
 
 type Props = {
   verticalMode: boolean;
@@ -34,6 +35,27 @@ const TimetableRow: React.FC<Props> = (props) => {
 
   let lastStartIndex = startingIndex;
 
+  const napLesson: ModifiableLesson = {
+    classNo: "", 
+    colorIndex: 0, 
+    //covidZone: "B", 
+    day: "Monday", 
+    endTime: "1800", 
+    isModifiable: false, 
+    lessonType: "Tutorial", 
+    moduleCode: "Nap", 
+    size: 16, 
+    startTime: "1700", 
+    title: "Nap", 
+    venue: "Pod", 
+    weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
+  }
+  
+  console.log(napLesson.colorIndex);
+
+  // TO-DO: the hasNap boolean should be updated once generateNaps has been clicked, so will require react state from 
+  const hasNap = false;
+
   return (
     <div className={styles.timetableRow}>
       {lessons.map((lesson) => {
@@ -61,7 +83,8 @@ const TimetableRow: React.FC<Props> = (props) => {
               }
             : {};
 
-        return (
+        return hasNap ? 
+        <NapCell/> : (
           <TimetableCell
             key={lesson.startTime}
             style={style}
@@ -74,6 +97,7 @@ const TimetableRow: React.FC<Props> = (props) => {
           />
         );
       })}
+      
     </div>
   );
 };

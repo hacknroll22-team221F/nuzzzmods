@@ -192,6 +192,7 @@ export const TimetableContainerComponent: FC = () => {
   }
 
   return (
+    <div>
     <TimetableContent
       key={semester}
       semester={semester}
@@ -210,6 +211,7 @@ export const TimetableContainerComponent: FC = () => {
       }
       readOnly={readOnly}
     />
+    </div>
   );
 };
 
