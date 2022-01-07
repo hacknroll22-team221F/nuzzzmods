@@ -453,7 +453,7 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
   let timetableWithLessons = hydrateSemTimetableWithLessons(timetable, modules, semester);
   const hiddenInTimetable = state.timetables.hidden[semester] || [];
 
-  // add dummy Nap Module
+  // Add dummy Nap Module
   let NAP: Module = {
     acadYear: "2021/2022",
     attributes: {mpes1: true, mpes2: true},
@@ -472,14 +472,14 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
   };
   modules = {...modules, NAP};
 
-  // add dummy Nap Lessons
-  let nap: () => Lesson = (d:String, sTime:String, eTime:String) => {
+  // Nap Lessons Structure
+  let nap: () => Lesson = (d:string, sTime:string, eTime:string) => {
     return {
-      classNo: "",
+      classNo: '1',
       covidZone: "Unknown",
       day: d,
       endTime: eTime,
-      lessonType: "Tutorial",
+      lessonType: "Nap",
       moduleCode: "NAP",
       size: 16,
       startTime: sTime,
@@ -489,19 +489,41 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
     }
   };
 
+  // Add nap lessons based on saved module lesson timings
+  if (localStorage.getItem("sleepHours") && localStorage.getItem("sleepTime")) { // saved sleephours and time
+    // insert joshen's parser code here for already occupied hours
+
+    // evaluate parser code
+    const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+    let NAPPER = {};
+    let index = 1;
+
+    for (const weekday of weekdays) {
+      let earliestStartTime = 1;
+
+      let sTime = "0800";
+      let eTime = "0900";
+      let newNapSlot = { [index]: nap(weekday, sTime, eTime)};
+      index++;
+      NAPPER = {...NAPPER, ...newNapSlot};
+      console.log(NAPPER);
+    }
+
+  }
+
   const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
 
-  let NAPPER = { Tutorial1: nap("Monday", "1400", "1600"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
-  let index = 1;
-  for (const weekday of weekdays) {
-    let sTime = "0800";
-    let eTime = "0900";
-    let newNapSlot = { [index]: nap(weekday, sTime, eTime)};
-    index++;
+  // let NAPPER = { Tutorial1: nap("Monday", "1400", "1600"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
+  // let index = 1;
+  // for (const weekday of weekdays) {
+  //   let sTime = "0800";
+  //   let eTime = "0900";
+  //   let newNapSlot = { [index]: nap(weekday, sTime, eTime)};
+  //   index++;
 
-    NAPPER = {...NAPPER, ...newNapSlot};
-    console.log(NAPPER);
-  }
+  //   NAPPER = {...NAPPER, ...newNapSlot};
+  //   console.log(NAPPER);
+  // }
 
   timetableWithLessons = {...timetableWithLessons, NAPPER};
 
