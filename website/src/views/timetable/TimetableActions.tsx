@@ -49,7 +49,7 @@ const TimetableActions: React.FC<Props> = (props) => {
   const handleSubmitSleep = () => {
     let sleep = parseInt(sleepHours);
 
-    if (isNaN(sleep)) {
+    if (isNaN(sleep) || sleep > 24) {
       setHasError(true);
     } else {
       localStorage.setItem("sleepHours", sleep);
@@ -121,7 +121,7 @@ const TimetableActions: React.FC<Props> = (props) => {
             color="warning"
             onChange={(input) => handleChangeSleep(input.target.value)}
             error={hasError}
-            helperText={hasError ? "Input should only consist of integers" : ""}
+            helperText={hasError ? "Input should only consist of integers and should be less than 24 hours" : ""}
           />
           <button 
             type="button"
