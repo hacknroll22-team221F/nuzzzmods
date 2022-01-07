@@ -132,7 +132,8 @@ export const TimetableModulesTableComponent: React.FC<Props> = (props) => {
 
   const { semester, tombstone, horizontalOrientation, moduleTableOrder } = props;
   let { modules } = props;
-
+  
+  
   // tombstone contains the data for the last deleted module. We insert it back
   // so that it gets sorted into its original location, then in renderModule()
   // takes care of rendering the tombstone
@@ -142,6 +143,7 @@ export const TimetableModulesTableComponent: React.FC<Props> = (props) => {
     });
   }
   modules = sortBy(modules, (module) => moduleOrders[moduleTableOrder].orderBy(module, semester));
+
 
   return (
     <div className={classnames(styles.modulesTable, elements.moduleTable, 'row')}>

@@ -187,13 +187,19 @@ export function doLessonsOverlap(lesson1: Lesson, lesson2: Lesson): boolean {
 //  ]
 export function arrangeLessonsWithinDay(lessons: ColoredLesson[]): TimetableDayArrangement {
   const rows: TimetableDayArrangement = [[]];
+  
   if (isEmpty(lessons)) {
     return rows;
   }
+
+  console.log(lessons);
+
   const sortedLessons = lessons.sort((a, b) => {
     const timeDiff = a.startTime.localeCompare(b.startTime);
     return timeDiff !== 0 ? timeDiff : a.classNo.localeCompare(b.classNo);
   });
+
+  console.log(sortedLessons);
   sortedLessons.forEach((lesson: ColoredLesson) => {
     for (let i = 0; i < rows.length; i++) {
       const rowLessons: ColoredLesson[] = rows[i];
@@ -208,8 +214,12 @@ export function arrangeLessonsWithinDay(lessons: ColoredLesson[]): TimetableDayA
     rows.push([lesson]);
   });
 
+  console.log(rows);
+
   return rows;
 }
+
+
 
 //  Accepts a flat array of lessons and groups them by day and rows with each day
 //  for rendering on the timetable.
@@ -227,7 +237,10 @@ export function arrangeLessonsWithinDay(lessons: ColoredLesson[]): TimetableDayA
 //  }
 export function arrangeLessonsForWeek(lessons: ColoredLesson[]): TimetableArrangement {
   const dayLessons = groupLessonsByDay(lessons);
-  return mapValues(dayLessons, (dayLesson: ColoredLesson[]) => arrangeLessonsWithinDay(dayLesson));
+  return mapValues(dayLessons, (dayLesson: ColoredLesson[]) => {
+    console.log(dayLesson);
+    return arrangeLessonsWithinDay(dayLesson);
+  });
 }
 
 // Determines if a Lesson on the timetable can be modifiable / dragged around.

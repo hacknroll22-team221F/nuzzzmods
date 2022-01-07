@@ -52,6 +52,8 @@ import TimetableModulesTable from './TimetableModulesTable';
 import ExamCalendar from './ExamCalendar';
 import ModulesTableFooter from './ModulesTableFooter';
 import styles from './TimetableContent.scss';
+import { length } from 'browserslist-config-nusmods';
+import { lastEventId } from '@sentry/browser';
 
 type ModifiedCell = {
   className: string;
@@ -314,19 +316,19 @@ class TimetableContent extends React.Component<Props, State> {
       });
     }
 
+    // TODO: insert nap lessons into timetable lessons
+
+
     // Inject color into module
     const coloredTimetableLessons = timetableLessons.map(
       (lesson: Lesson): ColoredLesson => ({
         ...lesson,
-        colorIndex: colors[lesson.moduleCode],
+        colorIndex: lesson.title === "Nap" ? 5 : colors[lesson.moduleCode],
       }),
     );
 
-    
-
     const arrangedLessons = arrangeLessonsForWeek(coloredTimetableLessons);
-
-    console.log(arrangedLessons);
+    
     const arrangedLessonsWithModifiableFlag: TimetableArrangement = _.mapValues(
       arrangedLessons,
       (dayRows) =>
@@ -343,69 +345,12 @@ class TimetableContent extends React.Component<Props, State> {
           }),
         ),
     );
-
-    //start and end time 
-    const dummyNapModule: Lesson = [{
-      classNo: "1",
-      colorIndex: 1,
-      covidZone: "Unknown",
-      day: "Tuesday",
-      endTime: "1000",
-      isModifiable: false,
-      lessonType: "Laboratory",
-      moduleCode: "Nap",
-      size: 16,
-      startTime: "0900",
-      title: "Nap",
-      venue: "POD",
-      weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
-    }]
-
-    // TO-DO --> From arrangedLessons, have an algorithm that generates Naps here to give arrangedNaps
-    const arrangedLessonsWithModifiableFlagWithNaps: TimetableArrangement = _.mapValues(
-      arrangedLessonsWithModifiableFlag, 
-      (dayRows) => {
-        console.log(dayRows);
-        let modifiedDayRows = [...dayRows];
-        let count = 800;
-        for (var i = 0; i < 2; i++) {
-          let end = count + 100;
-          let sTime = (count.toString() == "800" || count.toString() == "900") ? "0" + count.toString() : count.toString();
-          let eTime = (end.toString() == "900") ? "0900" : end.toString();
-          const dummyNapModule1: Lesson = [{
-            classNo: "2",
-            colorIndex: 5,
-            covidZone: "Unknown",
-            day: "Tuesday",
-            endTime: eTime,
-            isModifiable: false,
-            lessonType: "Laboratory",
-            moduleCode: "Nap",
-            size: 16,
-            startTime: sTime,
-            title: "Nap",
-            venue: "POD",
-            weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
-          }]
-          count+= 100
-          modifiedDayRows.push(dummyNapModule1);
-        }
-        console.log(modifiedDayRows);
-        return modifiedDayRows;
-        // dayRows.map((row) => {
-        //   console.log(row);
-        //   return;
-        // })
-      }
-        
-        
-    );
-
-
-
+  
     const isVerticalOrientation = timetableOrientation !== HORIZONTAL;
     const isShowingTitle = !isVerticalOrientation && showTitle;
     const addedModules = this.addedModules();
+
+    const arrangedLessonsWithModifiableFlagWithNaps = [];
 
     return (
       <div
@@ -503,9 +448,49 @@ class TimetableContent extends React.Component<Props, State> {
 
 function mapStateToProps(state: StoreState, ownProps: OwnProps) {
   const { semester, timetable } = ownProps;
-  const { modules } = state.moduleBank;
-  const timetableWithLessons = hydrateSemTimetableWithLessons(timetable, modules, semester);
+  let { modules } = state.moduleBank;
+  let timetableWithLessons = hydrateSemTimetableWithLessons(timetable, modules, semester);
   const hiddenInTimetable = state.timetables.hidden[semester] || [];
+
+  // add dummy Nap Module
+  let NAP: Module = {
+    acadYear: "2021/2022",
+    attributes: {mpes1: true, mpes2: true},
+    colorIndex: 5,
+    department: "Computer Science",
+    description: "",
+    faculty: "Computing",
+    fulfilRequirements: [],
+    hiddenInTimetable: false,
+    moduleCode: "Nap",
+    preclusion: "",
+    prereqTree: "",
+    prerequisite: "",
+    semesterData: [ {semester: 1, examDate: "", examDuration: ""}, {semester: 2, examDate: "", examDuration: ""}],
+    workload: []
+  };
+  modules = {...modules, NAP};
+
+  // add dummy Nap Lessons
+  let nap: () => Lesson = (d:String, sTime:String, eTime:String) => {
+    return {
+      classNo: "",
+      covidZone: "Unknown",
+      day: d,
+      endTime: eTime,
+      lessonType: "Tutorial",
+      moduleCode: "NAP",
+      size: 16,
+      startTime: sTime,
+      title: "Nap Zzz",
+      venue: "",
+      weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
+    }
+  };
+
+  let NAPPER = { Tutorial1: nap("Monday", "0800", "0900"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
+
+  timetableWithLessons = {...timetableWithLessons, NAPPER};
 
   return {
     semester,
