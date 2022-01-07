@@ -89,6 +89,7 @@ type State = {
   isScrolledHorizontally: boolean;
   showExamCalendar: boolean;
   tombstone: TombstoneModule | null;
+  hasNaps: boolean;
 };
 
 /**
@@ -120,6 +121,7 @@ class TimetableContent extends React.Component<Props, State> {
     isScrolledHorizontally: false,
     showExamCalendar: false,
     tombstone: null,
+    hasNaps: false,
   };
 
   timetableRef = React.createRef<HTMLDivElement>();
@@ -264,6 +266,7 @@ class TimetableContent extends React.Component<Props, State> {
           </>
         )}
         {this.renderModuleTable(nonClashingMods, horizontalOrientation, tombstone)}
+        
       </>
     );
   }
@@ -279,7 +282,7 @@ class TimetableContent extends React.Component<Props, State> {
       readOnly,
     } = this.props;
 
-    const { showExamCalendar } = this.state;
+    const { showExamCalendar, hasNaps } = this.state;
 
     let timetableLessons: Lesson[] = timetableLessonsArray(this.props.timetableWithLessons)
       // Do not process hidden modules
@@ -319,7 +322,11 @@ class TimetableContent extends React.Component<Props, State> {
       }),
     );
 
+    
+
     const arrangedLessons = arrangeLessonsForWeek(coloredTimetableLessons);
+
+    console.log(arrangedLessons);
     const arrangedLessonsWithModifiableFlag: TimetableArrangement = _.mapValues(
       arrangedLessons,
       (dayRows) =>
@@ -336,6 +343,41 @@ class TimetableContent extends React.Component<Props, State> {
           }),
         ),
     );
+
+    const dummyNapModule: Lesson = {
+      classNo: "",
+      colorIndex: 1,
+      covidZone: "",
+      day: "Tuesday",
+      endTime: "1100",
+      isModifiable: false,
+      lessonType: "Laboratory",
+      moduleCode: "Nap",
+      size: 16,
+      startTime: "1000",
+      title: "Nap",
+      venue: "POD",
+      weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
+    }
+
+    // TO-DO --> From arrangedLessons, have an algorithm that generates Naps here to give arrangedNaps
+    const arrangedLessonsWithModifiableFlagWithNaps: TimetableArrangement = _.mapValues(
+      arrangedLessonsWithModifiableFlag, 
+      (dayRows) => {
+
+        console.log(dayRows);
+        let modifiedDayRows = [...dayRows, dummyNapModule];
+        return modifiedDayRows;
+        // dayRows.map((row) => {
+        //   console.log(row);
+        //   return;
+        // })
+      }
+        
+        
+    );
+
+
 
     const isVerticalOrientation = timetableOrientation !== HORIZONTAL;
     const isShowingTitle = !isVerticalOrientation && showTitle;
@@ -382,7 +424,7 @@ class TimetableContent extends React.Component<Props, State> {
                 ref={this.timetableRef}
               >
                 <Timetable
-                  lessons={arrangedLessonsWithModifiableFlag}
+                  lessons={hasNaps ? arrangedLessonsWithModifiableFlagWithNaps :  arrangedLessonsWithModifiableFlag}
                   isVerticalOrientation={isVerticalOrientation}
                   isScrolledHorizontally={this.state.isScrolledHorizontally}
                   showTitle={isShowingTitle}
@@ -406,9 +448,10 @@ class TimetableContent extends React.Component<Props, State> {
                   timetable={this.props.timetable}
                   showExamCalendar={showExamCalendar}
                   toggleExamCalendar={() => this.setState({ showExamCalendar: !showExamCalendar })}
+                  hasNaps={hasNaps}
+                  toggleNaps={() => this.setState({ hasNaps: !hasNaps })}
                 />
               </div>
-
               <div className={styles.modulesSelect}>
                 {!readOnly && (
                   <ModulesSelectContainer

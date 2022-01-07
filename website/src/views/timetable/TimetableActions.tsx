@@ -27,6 +27,8 @@ type Props = {
 
   showExamCalendar: boolean;
   toggleExamCalendar: () => void;
+
+  hasNaps: boolean;
   toggleNaps: () => void;
 };
 
@@ -48,6 +50,11 @@ const sleepTimes = [
     label: '03:00',
   },
 ];
+
+function generateNaps(toggleNaps: () => void) {
+  console.log("here");
+  toggleNaps();
+}
 
 const TimetableActions: React.FC<Props> = (props) => (
   
@@ -140,9 +147,10 @@ const TimetableActions: React.FC<Props> = (props) => (
             elements.examCalendarBtn,
             'btn-outline-primary btn btn-svg',
           )}
+          onClick={() => generateNaps(props.toggleNaps)}
       >
-      Zz Generate Naps
-      </button>
+        {props.hasNaps ? "Clear Naps" : "Zz Generate Naps"}
+        </button>
     </div>
 
     <div className={styles.buttonGroup} role="group" aria-label="Timetable exporting">

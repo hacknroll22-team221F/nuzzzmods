@@ -22,6 +22,7 @@ import TimetableDay from './TimetableDay';
 
 type Props = TimerData & {
   lessons: TimetableArrangement;
+  
   // These should be non-optional, but because HOCs currently strip defaultProps
   // for the sake of our sanity we type these as optional to reduce errors at call sites
   isVerticalOrientation?: boolean;
@@ -29,6 +30,9 @@ type Props = TimerData & {
   showTitle?: boolean;
   onModifyCell?: OnModifyCell;
   highlightPeriod?: TimePeriod;
+
+  // optional
+  naps?: TimetableArrangement;
 };
 
 type State = {
