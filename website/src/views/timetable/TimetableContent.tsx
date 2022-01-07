@@ -54,6 +54,7 @@ import ModulesTableFooter from './ModulesTableFooter';
 import styles from './TimetableContent.scss';
 import { length } from 'browserslist-config-nusmods';
 import { lastEventId } from '@sentry/browser';
+import PickerStaticWrapper from '@mui/lab/internal/pickers/wrappers/PickerStaticWrapper';
 
 type ModifiedCell = {
   className: string;
@@ -491,27 +492,125 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
 
   // Add nap lessons based on saved module lesson timings
   if (localStorage.getItem("sleepHours") && localStorage.getItem("sleepTime")) { // saved sleephours and time
-    // insert joshen's parser code here for already occupied hours
-
-    // evaluate parser code
+    // Get occupied slots from timetableWithLessons
+    let occupiedTimeslots = {
+      Monday : [],
+      Tuesday : [],
+      Wednesday : [],
+      Thursday : [],
+      Friday : []
+    };
+    
+    for (const [key1, value1] of Object.entries(timetableWithLessons)) {
+      if (key1 != "NAPPER" ) {
+        for (const [key2, value2] of Object.entries(value1)) {
+          for (const lesson of value2) {
+            occupiedTimeslots[lesson.day] = [...occupiedTimeslots[lesson.day], lesson.startTime.concat(lesson.endTime)];
+            occupiedTimeslots[lesson.day].sort();
+          }
+        }
+      }
+    }
+    
+    // Generate nap lessons
     const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
     let NAPPER = {};
     let index = 1;
-
     for (const weekday of weekdays) {
-      let earliestStartTime = 1;
+      let timeslotsToday = occupiedTimeslots[weekday];
 
-      let sTime = "0800";
-      let eTime = "0900";
-      let newNapSlot = { [index]: nap(weekday, sTime, eTime)};
-      index++;
-      NAPPER = {...NAPPER, ...newNapSlot};
-      console.log(NAPPER);
+      // no nap sessions for days with no lessons
+      if (timeslotsToday.length <= 0) {
+        continue;
+      }
+
+
+      
+      let earliestStartTime = parseInt(timeslotsToday[0].substring(0,4));
+      console.log(earliestStartTime);
+
+      let inputSleepHours = localStorage.getItem("sleepHours").toString();
+      let requiredSleepHours = parseInt(inputSleepHours);
+      console.log(requiredSleepHours);
+
+      let inDT = localStorage.getItem("sleepTime").toString().split(" ")[4].split(":");
+      let inputSleepTime = inDT[0] + inDT[1];
+      let inputtedSleepTime = parseInt(inputSleepTime);
+      console.log(inputtedSleepTime);
+
+      const hoursToNap = (requiredSleepHours - (earliestStartTime - inputtedSleepTime)/100);
+      console.log(hoursToNap);
+
+      if (timeslotsToday.length === 1) {
+        let sTime = timeslotsToday[0].substring(4,8);
+        let sTimeInt = parseInt(sTime);
+        let eTimeInt = sTimeInt + hoursToNap;
+        let newNapSlot = { [index]: nap(weekday, sTime, eTimeInt.toString())}; 
+        NAPPER = {...NAPPER, ...newNapSlot};
+      }
+
+      let hoursRemaining = hoursToNap;
+      for (let i = 0; i < timeslotsToday.length - 1; i++) {
+        let pST:string = timeslotsToday[i].substring(4,8);
+        let possibleStartTime = parseInt(pST);
+        let pET:string = timeslotsToday[i + 1].substring(0,4);
+        let possibleEndTime = parseInt(pET);
+
+        if (hoursRemaining === 0) break;
+
+        if ((possibleEndTime - possibleStartTime)/ 100 <= hoursRemaining) {
+          let newNapSlot = { [index]: nap(weekday, pST, pET)}; 
+          NAPPER = {...NAPPER, ...newNapSlot};
+          hoursRemaining = hoursRemaining - (possibleEndTime - possibleStartTime)/ 100;
+        } else {
+          let eTime = (possibleStartTime/100 + hoursRemaining) * 100;
+          let newNapSlot = { [index]: nap(weekday, pST, eTime.toString())}; 
+          NAPPER = {...NAPPER, ...newNapSlot};
+          hoursRemaining = 0;
+        }
+        index++
+      }
     }
 
+    timetableWithLessons = {...timetableWithLessons, NAPPER};
   }
 
-  const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+  console.log("not a problem");
+// =======
+//   // Get occupied slots from timetableWithLessons
+//   let occupiedTimeslots = {
+//     Monday : [],
+//     Tuesday : [],
+//     Wednesday : [],
+//     Thursday : [],
+//     Friday : []
+//   };
+  
+//   for (const [key1, value1] of Object.entries(timetableWithLessons)) {
+//     if (key1 != "NAPPER" ) {
+//       for (const [key2, value2] of Object.entries(value1)) {
+//         for (const lesson of value2) {
+//           occupiedTimeslots[lesson.day].push(lesson.startTime.concat(lesson.endTime));
+//           occupiedTimeslots[lesson.day].sort();
+//         }
+//       }
+//     }
+//   }
+
+//   console.log(occupiedTimeslots);
+
+//   const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+// >>>>>>> 7b64555d423d2dade457b253983caeeb9e77a3e4
+
+
+// <<<<<<< HEAD
+// =======
+//     NAPPER = {...NAPPER, ...newNapSlot};
+//     //console.log(NAPPER);
+// >>>>>>> 7b64555d423d2dade457b253983caeeb9e77a3e4
+//   }
+
+//   const weekdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
 
   // let NAPPER = { Tutorial1: nap("Monday", "1400", "1600"), Tutorial2: nap("Monday", "0900", "1000"), Lecture: nap("Tuesday", "1400", "1700")};
   // let index = 1;
@@ -525,9 +624,8 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
   //   console.log(NAPPER);
   // }
 
-  timetableWithLessons = {...timetableWithLessons, NAPPER};
+  // timetableWithLessons = {...timetableWithLessons, NAPPER};
 
-  console.log(timetableWithLessons);
 
   return {
     semester,
