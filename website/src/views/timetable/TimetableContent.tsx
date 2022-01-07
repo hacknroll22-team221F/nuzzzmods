@@ -344,10 +344,10 @@ class TimetableContent extends React.Component<Props, State> {
         ),
     );
 
-    const dummyNapModule: Lesson = {
-      classNo: "",
+    const dummyNapModule: Lesson = [{
+      classNo: "1",
       colorIndex: 1,
-      covidZone: "",
+      covidZone: "Unknown",
       day: "Tuesday",
       endTime: "1100",
       isModifiable: false,
@@ -358,7 +358,7 @@ class TimetableContent extends React.Component<Props, State> {
       title: "Nap",
       venue: "POD",
       weeks: [1,2,3,4,5,6,7,8,9,10,11,12,13]
-    }
+    }]
 
     // TO-DO --> From arrangedLessons, have an algorithm that generates Naps here to give arrangedNaps
     const arrangedLessonsWithModifiableFlagWithNaps: TimetableArrangement = _.mapValues(
@@ -367,6 +367,7 @@ class TimetableContent extends React.Component<Props, State> {
 
         console.log(dayRows);
         let modifiedDayRows = [...dayRows, dummyNapModule];
+        console.log(modifiedDayRows);
         return modifiedDayRows;
         // dayRows.map((row) => {
         //   console.log(row);
