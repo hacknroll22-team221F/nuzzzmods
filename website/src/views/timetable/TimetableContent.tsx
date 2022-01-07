@@ -491,7 +491,7 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
   };
 
   // Add nap lessons based on saved module lesson timings
-  if (localStorage.getItem("sleepHours") !== undefined && localStorage.getItem("sleepTime") !== undefined) { // saved sleephours and time
+  if (localStorage.getItem("sleepHours") !== null && localStorage.getItem("sleepTime") !== null) { // saved sleephours and time
     // Get occupied slots from timetableWithLessons
     let occupiedTimeslots = {
       Monday : [],
@@ -524,8 +524,6 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
         continue;
       }
 
-
-      
       let earliestStartTime = parseInt(timeslotsToday[0].substring(0,4));
       console.log(earliestStartTime);
 
@@ -538,18 +536,21 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
       let inputtedSleepTime = parseInt(inputSleepTime);
       console.log(inputtedSleepTime);
 
-      const hoursToNap = (requiredSleepHours - (earliestStartTime - inputtedSleepTime)/100);
+      const hoursToNap:number = inputtedSleepTime > 1200
+        ? requiredSleepHours - ((earliestStartTime - (2400 - inputtedSleepTime)))/100
+        : requiredSleepHours - ((earliestStartTime - inputtedSleepTime)/100);
       console.log(hoursToNap);
 
-      if (timeslotsToday.length === 1) {
+      if (timeslotsToday.length === 1) {        
         let sTime = timeslotsToday[0].substring(4,8);
         let sTimeInt = parseInt(sTime);
-        let eTimeInt = sTimeInt + hoursToNap;
+        let eTimeInt = (sTimeInt/100 + hoursToNap) * 100;
         let newNapSlot = { [index]: nap(weekday, sTime, eTimeInt.toString())}; 
         NAPPER = {...NAPPER, ...newNapSlot};
       }
 
       let hoursRemaining = hoursToNap;
+      console.log(hoursRemaining);
       for (let i = 0; i < timeslotsToday.length - 1; i++) {
         let pST:string = timeslotsToday[i].substring(4,8);
         let possibleStartTime = parseInt(pST);
@@ -563,12 +564,20 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
           NAPPER = {...NAPPER, ...newNapSlot};
           hoursRemaining = hoursRemaining - (possibleEndTime - possibleStartTime)/ 100;
         } else {
-          let eTime = (possibleStartTime/100 + hoursRemaining) * 100;
+          let eTime:number = (possibleStartTime/100 + hoursRemaining) * 100;
           let newNapSlot = { [index]: nap(weekday, pST, eTime.toString())}; 
           NAPPER = {...NAPPER, ...newNapSlot};
           hoursRemaining = 0;
         }
         index++
+      }
+
+      if (hoursRemaining > 0) {
+        let sTime = timeslotsToday[timeslotsToday.length - 1].substring(4,8);
+        let sTimeInt = parseInt(sTime);
+        let eTimeInt = (sTimeInt/100 + hoursRemaining) * 100;
+        let newNapSlot = { [index]: nap(weekday, sTime, eTimeInt.toString())}; 
+        NAPPER = {...NAPPER, ...newNapSlot};
       }
     }
 
