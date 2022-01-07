@@ -110,35 +110,16 @@ const TimetableActions: React.FC<Props> = (props) => (
       )}
     </div>
 
-    <div className={styles.buttonGroup} role="group" aria-label="Nap generation">
+    <div className={styles.textField} role="group" aria-label="Nap generation">
       
       <TextField
-        className={styles.textField}
         id="outlined-basic"
         label="Daily hours of sleep"
         variant="outlined"
         size="small"
-        style={{ marginLeft: 8 }}
+        style={{ marginLeft: 8, marginBottom: 8 }}
+        color="warning"
       />
-
-      {/* 
-      <TextField
-          className={styles.textField}
-          size="small"
-          id="outlined-select-sleeptime-native"
-          select
-          label="Daily sleep time"
-          SelectProps={{
-            native: true,
-          }}
-          style={{ marginLeft: 8 }}
-        >
-          {sleepTimes.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </TextField> */}
 
       <SleepTimePicker/>
 

@@ -48,11 +48,11 @@ $btn-margin: 0.5rem;
   margin-left: -$btn-margin; // Negate childrens' left margins
   border-color: #ff5138;
 
-  @include media-breakpoint-up(md) {
-    :global(.textbox) {
-      padding: 0.25rem 0.25rem;
-      font-size: $font-size-sm;
-    }
+  > * {
+    flex-grow: 1;
+  
+    margin-bottom: $btn-margin;
+    margin-left: $btn-margin;
   }
 }
 

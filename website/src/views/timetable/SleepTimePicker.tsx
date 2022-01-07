@@ -16,7 +16,14 @@ export default function BasicTimePicker() {
         onChange={(newValue) => {
           setValue(newValue);
         }}
-        renderInput={(params) => <TextField size="small" style={{ marginLeft: 8, marginBottom: 8 }} {...params} />}
+        shouldDisableTime={(timeValue, clockType) => {
+            if (clockType === 'minutes' && timeValue % 30) {
+              return true;
+            }
+
+            return false;
+          }}
+        renderInput={(params) => <TextField size="small" color="warning" style={{ marginLeft: 8 }} {...params} />}
       />
     </LocalizationProvider>
   );
