@@ -26,6 +26,7 @@ type Props = {
 
   showExamCalendar: boolean;
   toggleExamCalendar: () => void;
+  toggleNaps: () => void;
 };
 
 const TimetableActions: React.FC<Props> = (props) => (
@@ -78,6 +79,17 @@ const TimetableActions: React.FC<Props> = (props) => (
           )}
         </button>
       )}
+
+      <button
+        type="button"
+        className={classnames('btn btn-outline-primary btn-svg')}
+        // onClick={pr}
+        onClick={props.toggleNaps}
+        // disabled={props.showExamCalendar}
+      >
+        {/* <Sidebar className={styles.sidebarIcon} /> */}
+        Nap Timetable
+      </button>
     </div>
 
     <div className={styles.buttonGroup} role="group" aria-label="Timetable exporting">
