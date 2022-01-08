@@ -33,9 +33,9 @@ type Props = {
   toggleNaps: () => void;
 };
 
-function generateNaps(toggleNaps: () => void) {
-  toggleNaps();
-}
+// function generateNaps(toggleNaps: () => void) {
+//   toggleNaps();
+// }
 
 const TimetableActions: React.FC<Props> = (props) => {
   const [sleepHours, setSleepHours] = React.useState("0");
@@ -47,13 +47,14 @@ const TimetableActions: React.FC<Props> = (props) => {
 
   const handleSubmitSleep = () => {
     let sleep = parseInt(sleepHours);
+    console.log("Sleep Hours",sleep);
 
     if (isNaN(sleep) || sleep > 24) {
       setHasError(true);
     } else {
-      localStorage.setItem("sleepHours", sleep);
+      localStorage.setItem("sleepHours", sleep.toString());
       setHasError(false);
-      setSleepHours("0");
+      //setSleepHours("0");
     }
   }
 
@@ -140,7 +141,7 @@ const TimetableActions: React.FC<Props> = (props) => {
               elements.examCalendarBtn,
               'btn-outline-primary btn btn-svg',
             )}
-            onClick={() => generateNaps(props.toggleNaps)}
+            onClick={props.toggleNaps}
         >
           {props.hasNaps ? "Clear Naps" : "Zz Generate Naps"}
           </button>

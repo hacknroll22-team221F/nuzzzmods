@@ -472,6 +472,7 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
     workload: []
   };
   modules = {...modules, NAP};
+  //console.log("Modules with NAP Module",modules);
 
   // Nap Lessons Structure
   let nap: () => Lesson = (d:string, sTime:string, eTime:string) => {
@@ -529,9 +530,11 @@ function mapStateToProps(state: StoreState, ownProps: OwnProps) {
 
       let inputSleepHours = localStorage.getItem("sleepHours").toString();
       let requiredSleepHours = parseInt(inputSleepHours);
-      console.log(requiredSleepHours);
+      console.log("Required Sleep Hours",requiredSleepHours);
 
-      let inDT = localStorage.getItem("sleepTime").toString().split(" ")[4].split(":");
+      let inDT = localStorage.getItem("sleepTime").toString();
+      console.log("inDT",inDT);
+      //let inDT = localStorage.getItem("sleepTime").toString().split(" ")[4].split(":");
       let inputSleepTime = inDT[0] + inDT[1];
       let inputtedSleepTime = parseInt(inputSleepTime);
       console.log(inputtedSleepTime);

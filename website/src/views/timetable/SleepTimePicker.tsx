@@ -8,12 +8,13 @@ import classnames from 'classnames';
 import styles from './TimetableActions.scss';
 import elements from 'views/elements';
 
-export default function BasicTimePicker() {
+export default function SleepTimePicker() {
   const [value, setValue] = React.useState(null);
 
   const handleClick = () => {
-    localStorage.setItem("sleepTime", value);
-    setValue(null);
+    console.log("Daily Sleep Time:",value);
+    localStorage.setItem("sleepTime", value.toString());
+    //setValue(null);
   }
 
   return (
